@@ -1,5 +1,20 @@
+.contaner-home {
+  background-color: aquamarine;
+  display: flex;
+}
+
 .product-list {
+  background-color: black;
   display: flex;
   flex-direction: column;
   width: 200px;
+}
+
+.products li {
+  background-color: red;
+}
+
+.products {
+  background-color: aqua;
+  display: flex;
 }
