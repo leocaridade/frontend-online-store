@@ -1,11 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { getCategories } from '../services/api';
-// import { getProductsFromCategoryAndQuery } from '../services/api';
+import { getCategories, getProductsFromQuery } from '../services/api';
 
 class Home extends React.Component {
   state = {
     listagemProdutos: [],
+    searchedProducts: [],
+    inputValue: '',
   };
 
   async componentDidMount() {
@@ -16,12 +17,45 @@ class Home extends React.Component {
     });
   }
 
-  // getProductList = async (category, query) => {
-  //   const productList = await getProductsFromCategoryAndQuery(category, query);
-  // };
+  onInputChange = ({ target }) => {
+    const { name, value } = target;
+
+    this.setState({
+      [name]: value,
+    });
+  };
+
+  getProductList = async (query) => {
+    const data = await getProductsFromQuery(query);
+
+    this.setState({
+      searchedProducts: data.results,
+    });
+  };
 
   render() {
-    const { listagemProdutos } = this.state;
+    const { listagemProdutos, inputValue, searchedProducts } = this.state;
+
+    const listProducts = (
+      searchedProducts.map((product) => (
+        <li
+          key={ product.id }
+          data-testid="product"
+        >
+          <p>{ product.title }</p>
+          <img src={ product.thumbnail } alt={ product.title } />
+          <p>
+            $
+            { product.price }
+          </p>
+        </li>
+      ))
+    );
+
+    const textError = (
+      <p>Nenhum produto foi encontrado</p>
+    );
+
     return (
       <div>
         <Link
@@ -30,36 +64,50 @@ class Home extends React.Component {
         >
           Carrinho de Compras
         </Link>
-        <label>
-          <input type="text" />
-        </label>
-        {
-          listagemProdutos.length === 0
-            ? (
-              <p data-testid="home-initial-message">
-                Digite algum termo de pesquisa ou escolha uma categoria.
-              </p>
-            )
-            : (
-              <aside>
-                <ul className="product-list">
-                  {
-                    listagemProdutos.map((produto) => (
-                      <button
-                        key={ produto.id }
-                        data-testid="category"
-                      >
-                        {produto.name}
-                      </button>
-                    ))
-                  }
-                </ul>
-              </aside>
-
-            )
-        }
+        <input
+          data-testid="query-input"
+          type="text"
+          name="inputValue"
+          onChange={ this.onInputChange }
+        />
+        <button
+          data-testid="query-button"
+          onClick={ () => this.getProductList(inputValue) }
+        >
+          pesquisar
+        </button>
+        <div className="contaner-home">
+          {
+            listagemProdutos.length === 0
+              ? (
+                <p data-testid="home-initial-message">
+                  Digite algum termo de pesquisa ou escolha uma categoria.
+                </p>
+              )
+              : (
+                <aside>
+                  <ul className="product-list">
+                    {
+                      listagemProdutos.map((produto) => (
+                        <button
+                          key={ produto.id }
+                          data-testid="category"
+                        >
+                          {produto.name}
+                        </button>
+                      ))
+                    }
+                  </ul>
+                </aside>
+              )
+          }
+          <section className="products">
+            {
+              searchedProducts.length === 0 ? textError : (<ul>{ listProducts }</ul>)
+            }
+          </section>
+        </div>
       </div>
-
     );
   }
 }
