@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 // import { getProductsFromCategoryAndQuery } from '../services/api';
 
 class Home extends React.Component {
@@ -17,6 +18,12 @@ class Home extends React.Component {
     const { listagemProdutos } = this.state;
     return (
       <div>
+        <Link
+          data-testid="shopping-cart-button"
+          to="/shopping-cart"
+        >
+          Carrinho de Compras
+        </Link>
         <label>
           <input type="text" />
         </label>
