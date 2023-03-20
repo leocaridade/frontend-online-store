@@ -1,10 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { getCategories, getProductsFromQuery } from '../services/api';
+import { getCategories, getProductsFromCategoryAndQuery } from '../services/api';
 
 class Home extends React.Component {
   state = {
-    listagemProdutos: [],
+    allProducts: [],
     searchedProducts: [],
     inputValue: '',
   };
@@ -13,7 +13,7 @@ class Home extends React.Component {
     const productList = await getCategories();
 
     this.setState({
-      listagemProdutos: productList,
+      allProducts: productList,
     });
   }
 
@@ -25,16 +25,24 @@ class Home extends React.Component {
     });
   };
 
-  getProductList = async (query) => {
-    const data = await getProductsFromQuery(query);
+  getProductList = async (categoria, termo) => {
+    const data = await getProductsFromCategoryAndQuery(categoria, termo);
 
     this.setState({
       searchedProducts: data.results,
     });
   };
 
+  getCategoriesList = async (categoria, termo) => {
+    const response = await getProductsFromCategoryAndQuery(categoria, termo);
+    const allProducts = response.results;
+    this.setState({
+      searchedProducts: allProducts,
+    });
+  };
+
   render() {
-    const { listagemProdutos, inputValue, searchedProducts } = this.state;
+    const { allProducts, inputValue, searchedProducts } = this.state;
 
     const listProducts = (
       searchedProducts.map((product) => (
@@ -72,13 +80,13 @@ class Home extends React.Component {
         />
         <button
           data-testid="query-button"
-          onClick={ () => this.getProductList(inputValue) }
+          onClick={ () => this.getProductList('', inputValue) }
         >
           pesquisar
         </button>
         <div className="contaner-home">
           {
-            listagemProdutos.length === 0
+            allProducts.length === 0
               ? (
                 <p data-testid="home-initial-message">
                   Digite algum termo de pesquisa ou escolha uma categoria.
@@ -88,8 +96,9 @@ class Home extends React.Component {
                 <aside>
                   <ul className="product-list">
                     {
-                      listagemProdutos.map((produto) => (
+                      allProducts.map((produto) => (
                         <button
+                          onClick={ () => this.getCategoriesList(produto.id, '') }
                           key={ produto.id }
                           data-testid="category"
                         >
