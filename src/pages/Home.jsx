@@ -46,17 +46,24 @@ class Home extends React.Component {
 
     const listProducts = (
       searchedProducts.map((product) => (
-        <li
+        <div
           key={ product.id }
           data-testid="product"
         >
-          <p>{ product.title }</p>
-          <img src={ product.thumbnail } alt={ product.title } />
-          <p>
-            $
-            { product.price }
-          </p>
-        </li>
+          <section>
+            <Link
+              to={ `/product-details/${product.id}` }
+              data-testid="product-detail-link"
+            >
+              <p>{ product.title }</p>
+              <img src={ product.thumbnail } alt={ product.title } />
+              <p>
+                $
+                { product.price }
+              </p>
+            </Link>
+          </section>
+        </div>
       ))
     );
 
