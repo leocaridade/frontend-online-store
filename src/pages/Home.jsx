@@ -63,6 +63,7 @@ class Home extends React.Component {
             <Link
               to={ `/product-details/${product.id}` }
               data-testid="product-detail-link"
+              produtos={ product }
             >
               <p>{ product.title }</p>
               <img src={ product.thumbnail } alt={ product.title } />
