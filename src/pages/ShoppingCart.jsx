@@ -8,12 +8,13 @@ class ShoppingCart extends Component {
 
   render() {
     const { cartProduct, quantity } = this.state;
+    console.log(cartProduct);
     return (
       <div>
         {
-          cartProduct.length === 0
+          !cartProduct
             ? (
-              <p data-testid="home-initial-message">
+              <p data-testid="shopping-cart-empty-message">
                 Seu carrinho está vazio
               </p>
             )
