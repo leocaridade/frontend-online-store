@@ -8,7 +8,6 @@ class ShoppingCart extends Component {
 
   render() {
     const { cartProduct, quantity } = this.state;
-    console.log(cartProduct);
     return (
       <div>
         {
