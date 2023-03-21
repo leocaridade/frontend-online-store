@@ -7,6 +7,7 @@ class Home extends React.Component {
     allProducts: [],
     searchedProducts: [],
     inputValue: '',
+    cartProducts: [],
   };
 
   async componentDidMount() {
@@ -41,9 +42,17 @@ class Home extends React.Component {
     });
   };
 
+  addCart = (product) => {
+    this.setState((prevState) => ({
+      cartProducts: [...prevState.cartProducts, product],
+    }), () => {
+      const { cartProducts } = this.state;
+      localStorage.setItem('cart-products', JSON.stringify(cartProducts));
+    });
+  };
+
   render() {
     const { allProducts, inputValue, searchedProducts } = this.state;
-
     const listProducts = (
       searchedProducts.map((product) => (
         <div
@@ -62,6 +71,12 @@ class Home extends React.Component {
                 { product.price }
               </p>
             </Link>
+            <button
+              data-testid="product-add-to-cart"
+              onClick={ () => this.addCart(product) }
+            >
+              Adicionar ao Carrinho
+            </button>
           </section>
         </div>
       ))
