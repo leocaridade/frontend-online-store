@@ -3,11 +3,11 @@ import React, { Component } from 'react';
 class ShoppingCart extends Component {
   state = {
     cartProduct: JSON.parse(localStorage.getItem('cart-products')),
+    quantity: 1,
   };
 
   render() {
-    const { cartProduct } = this.state;
-    console.log(cartProduct);
+    const { cartProduct, quantity } = this.state;
     return (
       <div>
         {
@@ -30,6 +30,9 @@ class ShoppingCart extends Component {
                       <p>
                         $
                         {produto.price}
+                      </p>
+                      <p data-testid="shopping-cart-product-quantity">
+                        {quantity}
                       </p>
                     </div>
                   ))
