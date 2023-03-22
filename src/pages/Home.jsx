@@ -16,6 +16,13 @@ class Home extends React.Component {
     this.setState({
       allProducts: productList,
     });
+    // verifica se já existem produtos no local storage, e se já existam, mantem eles
+    const ifLSProducts = JSON.parse(localStorage.getItem('cart-products'));
+    if (ifLSProducts) {
+      this.setState({
+        cartProducts: ifLSProducts,
+      });
+    }
   }
 
   onInputChange = ({ target }) => {
